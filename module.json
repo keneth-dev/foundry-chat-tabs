@@ -1,0 +1,38 @@
+{
+    "id": "chat-tabs",
+    "title": "Chat Tabs",
+    "version": "1.0.0",
+    "compatibility": {
+      "minimum": "12",
+      "verified": "12.331"
+    },
+    "description": "Chat tabs module for FoundryVTT.",
+    "authors": [
+      {
+        "name": "Keneth",
+        "discord": "keneth_",
+        "flags": {}
+      }
+    ],
+    "url": "https://github.com/keneth-dev/foundry-chat-tabs",
+    "languages": [
+      {
+        "lang": "en",
+        "name": "English",
+        "path": "languages/en.json"
+      }
+    ],
+    "scripts": [],
+    "esmodules": [
+      "main.js"
+    ],
+    "styles": [
+        "/styles/chat-tabs.css"
+    ],
+    "packs": [],
+    "changelog": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/main/CHANGELOG.md",
+    "manifest": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/main/module.json",
+    "download": "https://github.com/keneth-dev/foundry-chat-tabs/archive/refs/heads/main.zip",
+    "readme": "https://github.com/keneth-dev/foundry-chat-tabs",
+    "bugs": "https://github.com/keneth-dev/foundry-chat-tabs/issues"
+  }
