@@ -1,5 +1,5 @@
 {
-    "id": "chat-tabs",
+    "id": "chat-tabs-forge",
     "title": "Chat Tabs",
     "version": "1.0.0",
     "compatibility": {
@@ -30,9 +30,9 @@
         "/styles/chat-tabs.css"
     ],
     "packs": [],
-    "changelog": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/main/CHANGELOG.md",
-    "manifest": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/main/module.json",
-    "download": "https://github.com/keneth-dev/foundry-chat-tabs/archive/refs/heads/main.zip",
+    "changelog": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/forge/CHANGELOG.md",
+    "manifest": "https://raw.githubusercontent.com/keneth-dev/foundry-chat-tabs/forge/module.json",
+    "download": "https://github.com/keneth-dev/foundry-chat-tabs/archive/refs/heads/forge.zip",
     "readme": "https://github.com/keneth-dev/foundry-chat-tabs",
     "bugs": "https://github.com/keneth-dev/foundry-chat-tabs/issues"
   }
