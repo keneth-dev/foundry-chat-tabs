@@ -48,12 +48,20 @@ function notify(tab) {
     activeNotification = tab;
 }
 
+function displayMessages(messages, display) {
+    for (let i = 0; i < messages.length; i++) {
+        messages.get(i).style.display = display;
+    }
+}
+
 function filterMessages() {
     for (const tabType of tabList) {
+        const messages = $(`.message-${tabType}`);
+
         if (tabType === activeTab) {
-            $(`.message-${tabType}`).show();
+            displayMessages(messages, 'block');
         } else {
-            $(`.message-${tabType}`).hide();
+            displayMessages(messages, 'none');
         }
     }
 }
