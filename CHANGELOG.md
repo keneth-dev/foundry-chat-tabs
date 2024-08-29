@@ -1,3 +1,10 @@
+## 1.1.2
+### Optimization
+* Optimize the chat log observer callback.
+
+### Bug Fixes
+* Fix notification icons.
+
 ## 1.1.1
 ### Optimization
 * Further optimization by using a custom display method.
