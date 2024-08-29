@@ -1,5 +1,6 @@
 let activeTab = 'dialogue';
 let activeNotification = null; // Change to collection if more tabs are added.
+let tabList = ['dialogue', 'rolls'];
 
 // Override Foundry's default scrollBottom function to account for some messages being hidden.
 ChatLog.prototype.scrollBottom = async function ({popout=false, waitImages=false, scrollOptions={}}={}) {
@@ -47,6 +48,32 @@ function notify(tab) {
     activeNotification = tab;
 }
 
+function filterMessages() {
+    for (const tabType of tabList) {
+        if (tabType === activeTab) {
+            $(`.message-${tabType}`).show();
+        } else {
+            $(`.message-${tabType}`).hide();
+        }
+    }
+}
+
+const mutationCallback = async (mutations) => {
+    for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+            filterMessages();
+        }
+    }
+};
+
+Hooks.on('ready', async function() {
+    filterMessages();
+
+    const target = document.getElementById('chat-log');
+    const observer = new MutationObserver(mutationCallback);
+    observer.observe(target, { childList: true });
+});
+
 Hooks.on('renderChatLog', async function (chatLog, html, data) {
     const prependTabs = `
     <nav class="tabs chat-tabs" data-group="chat-tabs">
@@ -78,9 +105,7 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
             setTimeout(() => $(`.chat-tabs .${activeTab}-notification`).hide(), 500);
             activeNotification = null;
 
-            for (const message of chatLog.collection) {
-                setVisibility(message.id, isMessageVisible(message));
-            }
+            filterMessages();
 
             chatLog.scrollBottom({
                 popout: true,
@@ -110,15 +135,11 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
     }
 });
 
-Hooks.on('renderChatMessage', async function (chatMessage, html, data) {
-    if (!isMessageVisible(chatMessage)) {
-        html.hide();
-    } else {
-        html.show();
-    }
+Hooks.on('renderChatMessage', async function (message, html, data) {
+    html[0].classList.add(`message-${getMessageType(message)}`);
 });
 
-Hooks.on('createChatMessage', async function (chatMessage, options, userId) {
+Hooks.on('createChatMessage', async function (message, options, userId) {
     const type = getMessageType(chatMessage);
 
     // If message should be visible on a different tab, show notification pip.
