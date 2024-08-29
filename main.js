@@ -55,10 +55,10 @@ function displayMessages(messages, display) {
 }
 
 function filterMessages() {
-    for (const tabType of tabList) {
-        const messages = $(`.message-${tabType}`);
+    for (const tab of tabList) {
+        const messages = $(`.message-${tab}`);
 
-        if (tabType === activeTab) {
+        if (tab === activeTab) {
             displayMessages(messages, 'block');
         } else {
             displayMessages(messages, 'none');
@@ -69,7 +69,17 @@ function filterMessages() {
 const mutationCallback = async (mutations) => {
     for (const mutation of mutations) {
         if (mutation.type === 'childList') {
-            filterMessages();
+            const all = $(mutation.addedNodes);
+
+            for (const tab of tabList) {
+                const messages = all.filter(`.message-${tab}`);
+        
+                if (tab === activeTab) {
+                    displayMessages(messages, 'block');
+                } else {
+                    displayMessages(messages, 'none');
+                }
+            }
         }
     }
 };
@@ -148,10 +158,10 @@ Hooks.on('renderChatMessage', async function (message, html, data) {
 });
 
 Hooks.on('createChatMessage', async function (message, options, userId) {
-    const type = getMessageType(chatMessage);
+    const type = getMessageType(message);
 
     // If message should be visible on a different tab, show notification pip.
-    if (chatMessage.visible && activeTab !== type) {
+    if (message.visible && activeTab !== type) {
         notify(type);
     }
 });
