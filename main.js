@@ -33,7 +33,7 @@ function isMessageVisible(message) {
 }
 
 // Sets message visibility by its message id.
-function setVisibility(id, visible) {
+async function setVisibility(id, visible) {
     const el = $(`.chat-message[data-message-id=${id}]`);
 
     if (visible) {
@@ -43,18 +43,18 @@ function setVisibility(id, visible) {
     }
 }
 
-function notify(tab) {
+async function notify(tab) {
     $(`.chat-tabs .${tab}-notification`).show();
     activeNotification = tab;
 }
 
-function displayMessages(messages, display) {
+async function displayMessages(messages, display) {
     for (let i = 0; i < messages.length; i++) {
         messages.get(i).style.display = display;
     }
 }
 
-function filterMessages() {
+async function filterMessages() {
     for (const tab of tabList) {
         const messages = $(`.message-${tab}`);
 
@@ -65,32 +65,6 @@ function filterMessages() {
         }
     }
 }
-
-const mutationCallback = async (mutations) => {
-    for (const mutation of mutations) {
-        if (mutation.type === 'childList') {
-            const all = $(mutation.addedNodes);
-
-            for (const tab of tabList) {
-                const messages = all.filter(`.message-${tab}`);
-        
-                if (tab === activeTab) {
-                    displayMessages(messages, 'block');
-                } else {
-                    displayMessages(messages, 'none');
-                }
-            }
-        }
-    }
-};
-
-Hooks.on('ready', async function() {
-    filterMessages();
-
-    const target = document.getElementById('chat-log');
-    const observer = new MutationObserver(mutationCallback);
-    observer.observe(target, { childList: true });
-});
 
 Hooks.on('renderChatLog', async function (chatLog, html, data) {
     const prependTabs = `
@@ -154,7 +128,12 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
 });
 
 Hooks.on('renderChatMessage', async function (message, html, data) {
+    // Add a custom class, so that we can filter the message later.
     html[0].classList.add(`message-${getMessageType(message)}`);
+
+    if (!isMessageVisible(message)) {
+        html.hide();
+    }
 });
 
 Hooks.on('createChatMessage', async function (message, options, userId) {
