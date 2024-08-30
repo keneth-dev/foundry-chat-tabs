@@ -1,3 +1,12 @@
+## 1.1.3
+### Optimization
+* Further optimize by filtering messages directly during render.
+
+### Bug Fixes
+* Filtering during render also fixes popout chatlog not filtering correctly.
+
+### Bug Fixes
+
 ## 1.1.2
 ### Optimization
 * Optimize the chat log observer callback.
