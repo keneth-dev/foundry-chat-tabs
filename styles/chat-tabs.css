@@ -1,14 +1,19 @@
-#chat, #chat-popout {
-    gap: 5px;
-}
-
 .chat-tabs {
-    flex: 0;
+    line-height: 1.5;
+    position: sticky;
+    top: 0;
+    gap: 2px;
+    background-color: var(--background-color, var(--color-cool-5));
+    border-top: 0;
+    border-bottom: 0;
+    direction: ltr;
+    z-index: 1000;
 }
 
 .chat-tabs > .item {
     flex: 1;
-    border-radius: 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color, var(--color-cool-4));
 }
 
 .chat-tabs > .item.active {
@@ -18,7 +23,7 @@
 }
 
 .dialogue-notification, .rolls-notification {
-    top: 3px;
-    right: 3px;
+    top: 5px;
+    right: 10px;
     display: none;
 }
