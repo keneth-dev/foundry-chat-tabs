@@ -2,17 +2,6 @@ let activeTab = 'dialogue';
 let activeNotification = null; // Change to collection if more tabs are added.
 let tabList = ['dialogue', 'rolls'];
 
-// Override Foundry's default scrollBottom function to account for some messages being hidden.
-ChatLog.prototype.scrollBottom = async function ({popout=false, waitImages=false, scrollOptions={}}={}) {
-    if ( !this.rendered ) return;
-    if ( waitImages ) await this._waitForImages();
-
-    const log = this.element[0].querySelector("#chat-log");
-    // Finds the last visible chat message in the current chat log and scrolls to it.
-    $(log).find('.chat-message:visible:last')[0]?.scrollIntoView(scrollOptions);
-    if ( popout ) this._popout?.scrollBottom({waitImages, scrollOptions});
-}
-
 function getMessageType(message) {
     // TODO: It should be possible to externalize this logic.
     if (message.isRoll || message.style === CONST.CHAT_MESSAGE_STYLES.OTHER) {
@@ -75,9 +64,9 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
         <i class="notification-pip fas fa-exclamation-circle rolls-notification"></i>
     </nav>
     `;
-    html.find('#chat-log').before(prependTabs);
+    $(html).find('.chat-log').before(prependTabs);
 
-    const tabs = new Tabs({
+    const tabs = new foundry.applications.ux.Tabs({
         navSelector: '.tabs',
         contentSelector: '.content',
         initial: activeTab,
@@ -105,9 +94,9 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
             });
         }
     });
-    tabs.bind(html[0]);
+    tabs.bind(html);
 
-    if (chatLog.popOut) {
+    if (chatLog.isPopout) {
         window.game.chatTabs.popout = tabs;
     } else {
         window.game.chatTabs.sidebar = tabs;
@@ -119,7 +108,7 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
     });
 
     // Move the dialogue notification icon to the correct position on its tab.
-    $('.chat-tabs .dialogue-notification').css('right', function (v) { return $(this).parent().width() / 2 + 2; });
+    $('.chat-tabs .dialogue-notification').css('right', function (v) { return $(this).parent().width() / 2 + 10; });
 
     // Render any active notifications.
     if (activeNotification) {
@@ -127,12 +116,12 @@ Hooks.on('renderChatLog', async function (chatLog, html, data) {
     }
 });
 
-Hooks.on('renderChatMessage', async function (message, html, data) {
+Hooks.on('renderChatMessageHTML', async function (message, html, context) {
     // Add a custom class, so that we can filter the message later.
-    html[0].classList.add(`message-${getMessageType(message)}`);
+    html.classList.add(`message-${getMessageType(message)}`);
 
     if (!isMessageVisible(message)) {
-        html.hide();
+        $(html).hide();
     }
 });
 
